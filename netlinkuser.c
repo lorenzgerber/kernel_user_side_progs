@@ -1,5 +1,3 @@
-//Taken from https://stackoverflow.com/questions/15215865/netlink-sockets-in-c-using-the-3-x-linux-kernel?lq=1
-
 #include <sys/socket.h>
 #include <linux/netlink.h>
 #include <stdlib.h>
@@ -14,6 +12,11 @@ struct nlmsghdr *nlh = NULL;
 struct iovec iov;
 int sock_fd;
 struct msghdr msg;
+
+struct keyvalue {
+		int key;
+		char value[100];
+};
 
 int main()
 {
@@ -39,7 +42,14 @@ int main()
   nlh->nlmsg_pid = getpid();
   nlh->nlmsg_flags = 0;
 
-  strcpy(NLMSG_DATA(nlh), "Hello");
+  struct keyvalue *test;
+  test = malloc(sizeof(struct keyvalue));
+  test->key = 10;
+  strcpy(test->value, "this is the shit");
+  memcpy(NLMSG_DATA(nlh), &test, sizeof(struct keyvalue));
+  //NLMSG_DATA(nlh) = &test;
+
+  //strcpy(NLMSG_DATA(nlh), "Hello");
 
   iov.iov_base = (void *)nlh;
   iov.iov_len = nlh->nlmsg_len;
