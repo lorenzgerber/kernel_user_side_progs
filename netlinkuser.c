@@ -1,8 +1,10 @@
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <linux/netlink.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define NETLINK_USER 31
 
