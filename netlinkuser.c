@@ -31,7 +31,6 @@ int main()
   bind(sock_fd, (struct sockaddr*)&src_addr, sizeof(src_addr));
 
   memset(&dest_addr, 0, sizeof(dest_addr));
-  memset(&dest_addr, 0, sizeof(dest_addr));
   dest_addr.nl_family = AF_NETLINK;
   dest_addr.nl_pid = 0; /* For Linux Kernel */
   dest_addr.nl_groups = 0; /* unicast */
@@ -46,7 +45,9 @@ int main()
   test = malloc(sizeof(struct keyvalue));
   test->key = 10;
   strcpy(test->value, "this is the shit");
-  memcpy(NLMSG_DATA(nlh), &test, sizeof(struct keyvalue));
+  memcpy(NLMSG_DATA(nlh), test, sizeof(struct keyvalue));
+
+
   //NLMSG_DATA(nlh) = &test;
 
   //strcpy(NLMSG_DATA(nlh), "Hello");
