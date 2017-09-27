@@ -47,8 +47,8 @@ int main()
   struct keyvalue *test;
   test = malloc(sizeof(struct keyvalue));
   test->key = 10;
-  test->operation = 0;
-  strcpy(test->value, "this is the shit");
+  test->operation = 1;
+  strcpy(test->value, "");
   memcpy(NLMSG_DATA(nlh), test, sizeof(struct keyvalue));
 
 
@@ -63,7 +63,7 @@ int main()
   msg.msg_iov = &iov;
   msg.msg_iovlen = 1;
 
-  printf("Sending message \"%s\" to kernel\n", test->value);
+  printf("getting data with key \"%d\" from kernel\n", test->key);
   sendmsg(sock_fd,&msg,0);
   printf("Waiting for message from kernel\n");
 
