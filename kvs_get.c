@@ -32,7 +32,7 @@ int main(int argc, char*argv[]) {
 	struct keyvalue *data;
 
 	if(argc != 2){
-		perror("USAGE: kvs_get [key]\n");
+		fprintf(stderr, "Usage: kvs_get key\n");
 		exit(EXIT_FAILURE);
 	}
 
