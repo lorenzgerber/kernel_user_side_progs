@@ -14,7 +14,7 @@ struct nlmsghdr *nlh = NULL;
 struct iovec iov;
 int sock_fd;
 struct msghdr msg;
-/*operation: 0 = store, 1 = retrieve, 2 = delete, 3 = clear */
+/*operation: 0 = store, 1 = lookup, 2 = delete, 3 = clear */
 struct keyvalue {
 		int operation;
 		int key;
