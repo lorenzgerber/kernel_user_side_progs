@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
 	test = malloc(sizeof(struct keyvalue));
 	test->key = atoi(argv[1]);
 	test->operation = 0;
-	strcpy(test->value, *argv[2]);
+	strcpy(test->value, argv[2]);
 	memcpy(NLMSG_DATA(nlh), test, sizeof(struct keyvalue));
 
 
