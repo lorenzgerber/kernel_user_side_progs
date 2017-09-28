@@ -13,13 +13,8 @@
 #define CLEAR 3
 
 #define MAX_PAYLOAD 1024 /* maximum payload size*/
-struct sockaddr_nl src_addr, dest_addr;
-struct nlmsghdr *nlh = NULL;
-struct iovec iov;
-int sock_fd;
-struct msghdr msg;
 
-/*operation: 0 = store, 1 = lookup, 2 = delete, 3 = clear */
+
 struct keyvalue {
 		int operation;
 		int key;
@@ -27,6 +22,13 @@ struct keyvalue {
 };
 
 int main(int argc, char* argv[]){
+
+	struct sockaddr_nl src_addr, dest_addr;
+	struct nlmsghdr *nlh = NULL;
+	struct iovec iov;
+	int sock_fd;
+	struct msghdr msg;
+	struct keyvalue *data;
 
 	if(argc != 3){
 		perror("USAGE: kvs_put [key] [value]\n");
@@ -53,12 +55,12 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_pid = getpid();
 	nlh->nlmsg_flags = 0;
 
-	struct keyvalue *test;
-	test = malloc(sizeof(struct keyvalue));
-	test->key = atoi(argv[1]);
-	test->operation = 0;
-	strcpy(test->value, argv[2]);
-	memcpy(NLMSG_DATA(nlh), test, sizeof(struct keyvalue));
+
+	data = malloc(sizeof(struct keyvalue));
+	data->key = atoi(argv[1]);
+	data->operation = 0;
+	strcpy(data->value, argv[2]);
+	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 
 	iov.iov_base = (void *)nlh;
@@ -68,7 +70,7 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Sending message \"%s\" to kernel\n", test->value);
+	printf("Sending message \"%s\" to kernel\n", data->value);
 	sendmsg(sock_fd,&msg,0);
 	printf("Waiting for message from kernel\n");
 
