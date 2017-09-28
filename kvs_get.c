@@ -33,6 +33,7 @@ int main(int argc, char*argv[]) {
 
 	if(argc != 2){
 		perror("USAGE: kvs_get [key]\n");
+		exit(EXIT_FAILURE);
 	}
 
 	sock_fd=socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);
