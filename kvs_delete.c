@@ -10,7 +10,7 @@
 #define PUT 0
 #define GET 1
 #define DELETE 2
-#define CLEAR 3
+#define DELETE_KEY 	3
 
 #define MAX_PAYLOAD 1024 /* maximum payload size*/
 
@@ -33,7 +33,7 @@ int main(int argc, char*argv[]) {
 	struct keyvalue *data;
 
 	if(argc != 2){
-		fprintf(stderr, "Usage: kvs_get key\n");
+		fprintf(stderr, "Usage: kvs_delete key\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -61,7 +61,7 @@ int main(int argc, char*argv[]) {
 
 	data = malloc(sizeof(struct keyvalue));
 	data->key = atoi(argv[1]);
-	data->operation = DELETE;
+	data->operation = DELETE_KEY;
 	//strcpy(data->value, "");
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
