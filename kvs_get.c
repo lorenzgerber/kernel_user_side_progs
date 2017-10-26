@@ -23,6 +23,7 @@ struct msghdr msg;
 
 struct keyvalue {
 		int operation;
+		int remaining;
 		int key;
 		char *value;
 };
