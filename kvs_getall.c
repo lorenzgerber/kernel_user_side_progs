@@ -86,5 +86,6 @@ int main(int argc, char*argv[]) {
 	recvmsg(sock_fd, &msg, 0);
 	printf("Received message payload: %d\n", ((struct returnstruct *)NLMSG_DATA(nlh))->remaining);
 	printf("Received message payload: %s\n", ((struct returnstruct *)NLMSG_DATA(nlh))->value);
+	free(data);
 	close(sock_fd);
 }
