@@ -34,8 +34,9 @@ int main(int argc, char* argv[]){
 
 	struct keyvalue *data;
 
-	if(argc != 3){
-		fprintf(stderr, "Usage: kvs_put key value\n");
+
+	if(argc != 1){
+		fprintf(stderr, "Usage: kvs_backup\n");
 		exit(EXIT_FAILURE);
 	}
 
