@@ -25,7 +25,7 @@ struct msghdr msg;
 struct keyvalue {
 		int operation;
 		int key;
-		char *value;
+		char value[];
 };
 struct returnstruct{
 	int remaining;
@@ -65,10 +65,10 @@ int main(int argc, char*argv[]) {
 	nlh->nlmsg_flags = 0;
 
 
-	data = malloc(sizeof(struct keyvalue));
+	data = malloc(sizeof(struct keyvalue)+strlen("")+1);
 	//data->key = atoi(argv[1]);
 	data->operation = GET_ALL;
-	//strcpy(data->value, "");
+	strcpy(data->value, "");
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 	iov.iov_base = (void *)nlh;
