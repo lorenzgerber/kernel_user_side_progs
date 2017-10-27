@@ -29,7 +29,7 @@ struct keyvalue {
 };
 struct returnstruct{
 	int remaining;
-	char* value;
+	char value[];
 };
 
 
