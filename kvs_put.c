@@ -61,13 +61,13 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	char* data = malloc(sizeof(char));
+	char* data = malloc(sizeof(int));
 	*data=0;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
 	//data->value = malloc(sizeof(char)*strlen(argv[2]));
 	//strcpy(data->value, argv[2]);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(char)+1);
+	memcpy(NLMSG_DATA(nlh), data, sizeof(int));
 
 
 	iov.iov_base = (void *)nlh;
