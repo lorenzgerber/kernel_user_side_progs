@@ -13,6 +13,8 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <linux/netlink.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 struct sockaddr_nl src_addr, dest_addr;
 struct nlmsghdr *nlh = NULL;
@@ -47,12 +49,12 @@ int main(int argc, char* argv[]){
 	FILE *fp = fopen("keystore.backup", "ab+");
 	if (fp == NULL) {
 		printf("Problem opening file");
-		return EXIT_FAILURE;
+		return -1;
 	}
 	length = fsize(fp);
 	//fill with testdata
 	if(length == 0){
-		for(int i = 0;i<30;i++){
+		for(int i = 0;i<31;i++){
 			int results = fputc(testdata[i], fp);
 			if (results == EOF) {
 				// Failed to write do error code here.
@@ -64,7 +66,7 @@ int main(int argc, char* argv[]){
 	rewind(fp);
 	c = fgetc(fp);
 	int i = 0;
-	while (c != EOF){
+	while (c != EOF && c != '\0'){
 		while(c != '\0'){
 			keystring[i] = c;
 			c = fgetc(fp);
@@ -86,8 +88,6 @@ int main(int argc, char* argv[]){
 		if(c != EOF){
 			c = fgetc(fp);
 		}
-
-
 	}
 	free(pair);
 	free(keystring);
