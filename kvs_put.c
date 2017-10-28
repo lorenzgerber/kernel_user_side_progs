@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	char data = malloc(sizeof(char));
+	char* data = malloc(sizeof(char));
 	data=0;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
