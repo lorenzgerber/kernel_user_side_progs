@@ -63,7 +63,6 @@ int main(int argc, char*argv[]) {
 	data = malloc(sizeof(struct keyvalue));
 	data->key = atoi(argv[1]);
 	data->operation = GET;
-	//strcpy(data->value, "");
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 	iov.iov_base = (void *)nlh;
@@ -79,9 +78,7 @@ int main(int argc, char*argv[]) {
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("Received message payload: %s, Message length: %d\n", (char *)NLMSG_DATA(nlh), nlh->nlmsg_len);
-
-
+	printf("Value:\n%s\n", (char *)NLMSG_DATA(nlh));
 
 	close(sock_fd);
 }

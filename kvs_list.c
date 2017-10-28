@@ -33,8 +33,6 @@ int main(int argc, char* argv[]){
 
 
 	struct keyvalue *data;
-	FILE *file;
-
 
 	if(argc != 1){
 		fprintf(stderr, "Usage: kvs_backup\n");
@@ -62,14 +60,9 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_pid = getpid();
 	nlh->nlmsg_flags = 0;
 
-
 	data = malloc(sizeof(struct keyvalue));
-	//data->key = atoi(argv[1]);
 	data->operation = 4;
-	//data->value = malloc(sizeof(char)*strlen(argv[2]));
-	//strcpy(data->value, argv[2]);
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
-
 
 	iov.iov_base = (void *)nlh;
 	iov.iov_len = nlh->nlmsg_len;
@@ -78,17 +71,24 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Doing the back up thing\n");
 	sendmsg(sock_fd,&msg,0);
 	printf("Waiting for message from kernel\n");
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("length of backup message %d\n", nlh->nlmsg_len);
 
 	int counter = 0;
 	for(int i = 0; i < nlh->nlmsg_len-16; i++){
-		printf("%s", ((char*)NLMSG_DATA(nlh))[i]);
+	  if (((char*)NLMSG_DATA(nlh))[i] == 0){
+	    if(counter == 0){
+	      printf(" ");
+	      counter ++;
+	    } else {
+	      printf("\n");
+	      counter = 0;
+	    }
+	  }
+	  printf("%c", ((char*)NLMSG_DATA(nlh))[i]);
 	}
 
 

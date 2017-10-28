@@ -63,4 +63,5 @@ kvs_get
 kvs_put
 kvs_delete
 kvs_backup
+kvs_list
 keystore.backup
