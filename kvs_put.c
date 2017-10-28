@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 	//data->operation = 0;
 	//data->value = malloc(sizeof(char)*strlen(argv[2]));
 	//strcpy(data->value, argv[2]);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(data));
+	memcpy(NLMSG_DATA(nlh), data, sizeof(char));
 
 
 	iov.iov_base = (void *)nlh;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Sending message \"%s\" to kernel\n", data);
+	printf("Sending message \"%c\" to kernel\n", data);
 	sendmsg(sock_fd,&msg,0);
 	free(data);
 
