@@ -33,6 +33,7 @@ int main(int argc, char* argv[]){
 
 
 	struct keyvalue *data;
+	FILE *file;
 
 
 	if(argc != 1){
@@ -85,6 +86,13 @@ int main(int argc, char* argv[]){
 	recvmsg(sock_fd, &msg, 0);
 	printf("length of backup message %d\n", nlh->nlmsg_len);
 	printf("Received backup message: %s\n", (char *)NLMSG_DATA(nlh));
+
+	file = fopen("keystore.backup", "w");
+	for (int i = 0; i <= nlh->nlmsg_len; i++){
+		fputc(((char*)NLMSG_DATA(nlh))[i], file);
+	}
+	fclose(file);
+
 
 	close(sock_fd);
 }
