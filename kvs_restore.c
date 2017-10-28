@@ -33,33 +33,19 @@ struct keyvalue_pair{
 	char data[];
 };
 
+int restore(struct keyvalue_pair* pair);
 
-//int fsize(FILE *fp);
-int restore(int key, char* value);
 int main(int argc, char* argv[]){
 
 	char c;
-
 	struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
-	//char testdata[31] = "3\0stures data\08\0uwe bolls data";
-	//int length;
 
 	FILE *fp = fopen("keystore.backup", "ab+");
 	if (fp == NULL) {
 		printf("Problem opening file");
 		return -1;
 	}
-	//length = fsize(fp);
-	//fill with testdata
-	/*if(length == 0){
-		for(int i = 0;i<31;i++){
-			int results = fputc(testdata[i], fp);
-			if (results == EOF) {
-				// Failed to write do error code here.
-			}
-		}
-	}*/
 
 	// Read contents from file
 	rewind(fp);
@@ -85,7 +71,7 @@ int main(int argc, char* argv[]){
 		i=0;
 		pair->key = atoi(keystring);
 		strcpy(pair->data, data);
-		printf ("\n%d %s", pair->key, pair->data);
+		restore(pair);
 		if(c != EOF){
 			c = fgetc(fp);
 		}
@@ -97,7 +83,7 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-int restore(int key, char* value){
+int restore(struct keyvalue_pair* pair){
 
 	struct keyvalue *data;
 
@@ -124,10 +110,10 @@ int restore(int key, char* value){
 
 
 	data = malloc(sizeof(struct keyvalue));
-	data->key = key;
+	data->key = pair->key;
 	data->operation = 0;
-	data->value = malloc(sizeof(char)*strlen(value)+1);
-	strcpy(data->value, value);
+	data->value = malloc(sizeof(char)*strlen(pair->data)+1);
+	strcpy(data->value, pair->data);
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 
@@ -149,11 +135,3 @@ int restore(int key, char* value){
 	close(sock_fd);
 	return 0;
 }
-
-/*int fsize(FILE *fp){
-    int prev=ftell(fp);
-    fseek(fp, 0L, SEEK_END);
-    int sz=ftell(fp);
-    fseek(fp,prev,SEEK_SET); //go back to where we were
-    return sz;
-}*/
