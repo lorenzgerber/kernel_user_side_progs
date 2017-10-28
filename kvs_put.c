@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
 
 
 	char* data = malloc(sizeof(int));
-	*data=0;
+	data=0;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
 	//data->value = malloc(sizeof(char)*strlen(argv[2]));
