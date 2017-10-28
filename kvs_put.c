@@ -31,7 +31,7 @@ struct keyvalue {
 int main(int argc, char* argv[]){
 
 
-	struct keyvalue *data;
+	char *data;
 
 	if(argc != 3){
 		fprintf(stderr, "Usage: kvs_put key value\n");
@@ -60,12 +60,12 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	data = malloc(sizeof(struct keyvalue));
-	data->key = atoi(argv[1]);
-	data->operation = 0;
-	data->value = malloc(sizeof(char)*strlen(argv[2]));
-	strcpy(data->value, argv[2]);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
+	data = malloc(sizeof(char)*strlen(argv[1])+1);
+	//data->key = atoi(argv[1]);
+	//data->operation = 0;
+	//data->value = malloc(sizeof(char)*strlen(argv[2]));
+	//strcpy(data->value, argv[2]);
+	memcpy(NLMSG_DATA(nlh), data, sizeof(data));
 
 
 	iov.iov_base = (void *)nlh;
@@ -75,13 +75,20 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Sending message \"%s\" to kernel\n", data->value);
+	printf("Sending message \"%s\" to kernel\n", data);
 	sendmsg(sock_fd,&msg,0);
+	free(data);
+
+	data = malloc(sizeof(char)*strlen(argv[2])+1);
+	memcpy(NLMSG_DATA(nlh), data, sizeof(data));
+	printf("Sending message \"%s\" to kernel\n", data);
+	sendmsg(sock_fd,&msg,0);
+
 	printf("Waiting for message from kernel\n");
 
 	/* Read message from kernel */
-	recvmsg(sock_fd, &msg, 0);
-	printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
+	//recvmsg(sock_fd, &msg, 0);
+	//printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
 
 	close(sock_fd);
 }

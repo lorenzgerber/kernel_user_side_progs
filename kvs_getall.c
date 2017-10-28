@@ -71,6 +71,7 @@ int main(int argc, char*argv[]) {
 	strcpy(data->value, "");
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
+
 	iov.iov_base = (void *)nlh;
 	iov.iov_len = nlh->nlmsg_len;
 	msg.msg_name = (void *)&dest_addr;
