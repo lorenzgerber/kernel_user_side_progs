@@ -88,11 +88,10 @@ int main(int argc, char* argv[]){
 	printf("Received backup message: %s\n", (char *)NLMSG_DATA(nlh));
 
 	file = fopen("keystore.backup", "w");
-	//char test[1024];
-	//memcpy(test, NLMSG_DATA(nlh), nlh->nlmsg_len);
-	for (int i = 0; i <= nlh->nlmsg_len-18; i++){
-		//fputc(test[i], file);
-		printf("%d", *((int*) NLMSG_DATA(nlh)+i));
+
+	for (int i = 0; i < nlh->nlmsg_len-16; i++){
+	  fputc(((char*)NLMSG_DATA(nlh))[i], file);
+	  printf("%d ", ((char*)NLMSG_DATA(nlh))[i]);
 	}
 	fclose(file);
 
