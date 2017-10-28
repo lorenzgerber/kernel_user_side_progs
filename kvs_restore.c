@@ -12,27 +12,39 @@ struct keyvalue_pair{
 	int key;
 	char data[];
 };
-
+int fsize(FILE *fp){
+    int prev=ftell(fp);
+    fseek(fp, 0L, SEEK_END);
+    int sz=ftell(fp);
+    fseek(fp,prev,SEEK_SET); //go back to where we were
+    return sz;
+}
 int main(int argc, char* argv[]){
 
 	char c;
 	char* keystring = calloc(0,sizeof(char)*255);
 	char* data = calloc(0,sizeof(char)*1024);
 	struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
-	char testdata[31] = "3\0stures data\05\0uwe bolls data";
+
+	char testdata[31] = "3\0stures data\08\0uwe bolls data";
+	int length;
 
 	FILE *fp = fopen("keystore.backup", "ab+");
 	if (fp == NULL) {
 		printf("Problem opening file");
 		return EXIT_FAILURE;
 	}
+	length = fsize(fp);
 	//fill with testdata
-	for(int i = 0;i<30;i++){
-		int results = fputc(testdata[i], fp);
-		if (results == EOF) {
-			// Failed to write do error code here.
+	if(length == 0){
+		for(int i = 0;i<30;i++){
+			int results = fputc(testdata[i], fp);
+			if (results == EOF) {
+				// Failed to write do error code here.
+			}
 		}
 	}
+
 	// Read contents from file
 	rewind(fp);
 	c = fgetc(fp);
@@ -46,7 +58,7 @@ int main(int argc, char* argv[]){
 		keystring[i] = '\0';
 		c = fgetc(fp);
 		i=0;
-		while(c != '\0'){
+		while(c != '\0' && c != EOF){
 			data[i] = c;
 			c = fgetc(fp);
 			i++;
@@ -56,7 +68,11 @@ int main(int argc, char* argv[]){
 		pair->key = atoi(keystring);
 		strcpy(pair->data, data);
 		printf ("\n%d %s", pair->key, pair->data);
-		c = fgetc(fp);
+		if(c != EOF){
+			c = fgetc(fp);
+		}
+
+
 	}
 	free(pair);
 	free(keystring);
