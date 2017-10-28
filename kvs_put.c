@@ -63,13 +63,13 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	struct opcode* data = malloc(sizeof(struct opcode));
-	data->op = PUT;
+	struct opcode* op = malloc(sizeof(struct opcode));
+	op->op = PUT;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
 	//data->value = malloc(sizeof(char)*strlen(argv[2]));
 	//strcpy(data->value, argv[2]);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(struct opcode));
+	memcpy(NLMSG_DATA(nlh), op, sizeof(struct opcode));
 
 
 	iov.iov_base = (void *)nlh;
@@ -79,11 +79,11 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Sending message \"%d\" to kernel\n", data->op);
+	printf("Sending message \"%d\" to kernel\n", op->op);
 	sendmsg(sock_fd,&msg,0);
-	free(data);
+	free(op);
 
-	data = malloc(sizeof(char)*strlen(argv[2])+1);
+	char* data = malloc(sizeof(char)*strlen(argv[2])+1);
 	strcpy(data,argv[2]);
 	memcpy(NLMSG_DATA(nlh), data, sizeof(char)*strlen(argv[2]+1));
 	printf("Sending message \"%s\" to kernel\n", data);
