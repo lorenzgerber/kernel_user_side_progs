@@ -82,8 +82,9 @@ int main(int argc, char* argv[]){
 	printf("Waiting for message from kernel\n");
 
 	/* Read message from kernel */
-	//recvmsg(sock_fd, &msg, 0);
-	//printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
+	recvmsg(sock_fd, &msg, 0);
+	printf("length of backup message %d\n", nlh->nlmsg_len);
+	printf("Received backup message: %s\n", (char *)NLMSG_DATA(nlh));
 
 	close(sock_fd);
 }
