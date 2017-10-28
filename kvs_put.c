@@ -32,7 +32,7 @@ struct keyvalue {
 int main(int argc, char* argv[]){
 
 
-	char *data;
+	//char *data;
 
 	if(argc != 3){
 		fprintf(stderr, "Usage: kvs_put key value\n");
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	data = malloc(sizeof(char));
+	char data = malloc(sizeof(char));
 	data=0;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
