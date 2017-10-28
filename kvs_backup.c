@@ -92,6 +92,7 @@ int main(int argc, char* argv[]){
 	memcpy(test, NLMSG_DATA(nlh), nlh->nlmsg_len);
 	for (int i = 0; i <= nlh->nlmsg_len; i++){
 		fputc(test[i], file);
+		printf("%d", test[i]);
 	}
 	fclose(file);
 
