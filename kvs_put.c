@@ -18,6 +18,7 @@
 
 struct sockaddr_nl src_addr, dest_addr;
 struct nlmsghdr *nlh = NULL;
+struct nlmsghdr *nlh2 = NULL;
 struct iovec iov;
 int sock_fd;
 struct msghdr msg;
@@ -60,7 +61,7 @@ int main(int argc, char* argv[]){
 	memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD));
 	nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
 	nlh->nlmsg_pid = getpid();
-	nlh->nlmsg_flags = 0;
+	nlh->nlmsg_flags = NLM_F_MULTI;
 
 
 	struct opcode* op = malloc(sizeof(struct opcode));
@@ -83,9 +84,15 @@ int main(int argc, char* argv[]){
 	sendmsg(sock_fd,&msg,0);
 	free(op);
 
+	nlh2 = (struct nlmsghdr *)malloc(NLMSG_SPACE(MAX_PAYLOAD));
+	memset(nlh2, 0, NLMSG_SPACE(MAX_PAYLOAD));
+	nlh2->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
+	nlh2->nlmsg_pid = getpid();
+	nlh2->nlmsg_flags = NLMSG_DONE;
+
 	char* data = malloc(sizeof(char)*strlen(argv[2])+1);
 	strcpy(data,argv[2]);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(char)*strlen(argv[2]+1));
+	memcpy(NLMSG_DATA(nlh2), data, sizeof(char)*strlen(argv[2]+1));
 	printf("Sending message \"%s\" to kernel\n", data);
 	sendmsg(sock_fd,&msg,0);
 
