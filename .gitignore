@@ -62,3 +62,4 @@ netlinkget
 kvs_get
 kvs_put
 kvs_delete
+kvs_backup
