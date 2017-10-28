@@ -2,7 +2,7 @@
 CC=gcc
 CFLAGS= -Wall -std=c99 -Werror -g
 
-all: get put delete backup restore
+all: get put delete backup restore list
 
 get: kvs_get.c
 	$(CC) $(CFLAGS) -o kvs_get kvs_get.c
@@ -14,6 +14,8 @@ restore: kvs_restore.c
 	$(CC) $(CFLAGS) -o kvs_restore kvs_restore.c
 backup: kvs_backup.c
 	$(CC) $(CFLAGS) -o kvs_backup kvs_backup.c
-clean:
-	rm kvs_get kvs_put kvs_delete kvs_restore kvs_backup
+list : kvs_list.c
+	$(CC) $(CFLAGS) -o kvs_list kvs_list.c
 
+clean:
+	rm kvs_get kvs_put kvs_delete kvs_restore kvs_backup kvs_list

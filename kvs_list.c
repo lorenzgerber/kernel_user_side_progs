@@ -5,13 +5,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <pthread.h>
+
+
 
 #define NETLINK_USER 31
 #define PUT 0
 #define GET 1
 #define DELETE 2
 #define CLEAR 3
+#define BACKUP 4
 
 #define MAX_PAYLOAD 1024 /* maximum payload size*/
 
@@ -27,14 +29,13 @@ struct keyvalue {
 		char *value;
 };
 
-
-int main(int argc, char*argv[]) {
+int main(int argc, char* argv[]){
 
 
 	struct keyvalue *data;
 
-	if(argc != 2){
-		fprintf(stderr, "Usage: kvs_get key\n");
+	if(argc != 1){
+		fprintf(stderr, "Usage: kvs_backup\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -44,7 +45,7 @@ int main(int argc, char*argv[]) {
 
 	memset(&src_addr, 0, sizeof(src_addr));
 	src_addr.nl_family = AF_NETLINK;
-	src_addr.nl_pid = pthread_self() << 16 | getpid();
+	src_addr.nl_pid = getpid(); /* self pid */
 
 	bind(sock_fd, (struct sockaddr*)&src_addr, sizeof(src_addr));
 
@@ -56,13 +57,11 @@ int main(int argc, char*argv[]) {
 	nlh = (struct nlmsghdr *)malloc(NLMSG_SPACE(MAX_PAYLOAD));
 	memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD));
 	nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
-	nlh->nlmsg_pid = pthread_self() << 16 | getpid();
+	nlh->nlmsg_pid = getpid();
 	nlh->nlmsg_flags = 0;
 
-
 	data = malloc(sizeof(struct keyvalue));
-	data->key = atoi(argv[1]);
-	data->operation = GET;
+	data->operation = 4;
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 	iov.iov_base = (void *)nlh;
@@ -72,13 +71,25 @@ int main(int argc, char*argv[]) {
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("getting data with key \"%d\" from kernel\n", data->key);
 	sendmsg(sock_fd,&msg,0);
 	printf("Waiting for message from kernel\n");
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("Value:\n%s\n", (char *)NLMSG_DATA(nlh));
 
-	close(sock_fd);
+	int counter = 0;
+	for(int i = 0; i < nlh->nlmsg_len-16; i++){
+	  if (((char*)NLMSG_DATA(nlh))[i] == 0){
+	    if(counter == 0){
+	      printf(" ");
+	      counter ++;
+	    } else {
+	      printf("\n");
+	      counter = 0;
+	    }
+	  }
+	  printf("%c", ((char*)NLMSG_DATA(nlh))[i]);
+	}
+
+
 }
