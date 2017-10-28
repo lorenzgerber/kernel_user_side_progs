@@ -84,7 +84,8 @@ int main(int argc, char* argv[]){
 	free(data);
 
 	data = malloc(sizeof(char)*strlen(argv[2])+1);
-	memcpy(NLMSG_DATA(nlh), data, sizeof(data));
+	strcpy(data,argv[2]);
+	memcpy(NLMSG_DATA(nlh), data, sizeof(char)*strlen(argv[2]+1));
 	printf("Sending message \"%s\" to kernel\n", data);
 	sendmsg(sock_fd,&msg,0);
 
