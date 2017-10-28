@@ -28,6 +28,7 @@ struct keyvalue {
 		char *value;
 };
 
+
 int main(int argc, char* argv[]){
 
 
@@ -60,7 +61,8 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_flags = 0;
 
 
-	data = malloc(sizeof(char)*strlen(argv[1])+1);
+	data = malloc(sizeof(char));
+	data=0;
 	//data->key = atoi(argv[1]);
 	//data->operation = 0;
 	//data->value = malloc(sizeof(char)*strlen(argv[2]));
