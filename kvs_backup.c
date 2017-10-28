@@ -13,6 +13,7 @@
 #define GET 1
 #define DELETE 2
 #define CLEAR 3
+#define BACKUP 4
 
 #define MAX_PAYLOAD 1024 /* maximum payload size*/
 
@@ -32,9 +33,11 @@ int main(int argc, char* argv[]){
 
 
 	struct keyvalue *data;
+	FILE *file;
 
-	if(argc != 3){
-		fprintf(stderr, "Usage: kvs_put key value\n");
+
+	if(argc != 1){
+		fprintf(stderr, "Usage: kvs_backup\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -61,10 +64,10 @@ int main(int argc, char* argv[]){
 
 
 	data = malloc(sizeof(struct keyvalue));
-	data->key = atoi(argv[1]);
-	data->operation = 0;
-	data->value = malloc(sizeof(char)*strlen(argv[2])+1);
-	strcpy(data->value, argv[2]);
+	//data->key = atoi(argv[1]);
+	data->operation = 4;
+	//data->value = malloc(sizeof(char)*strlen(argv[2]));
+	//strcpy(data->value, argv[2]);
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
 
 
@@ -75,13 +78,21 @@ int main(int argc, char* argv[]){
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
 
-	printf("Sending message \"%s\" to kernel\n", data->value);
+	printf("Doing the back up thing\n");
 	sendmsg(sock_fd,&msg,0);
 	printf("Waiting for message from kernel\n");
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
+	printf("length of backup message %d\n", nlh->nlmsg_len);
+
+	file = fopen("keystore.backup", "w");
+
+	for (int i = 0; i < nlh->nlmsg_len-16; i++){
+	  fputc(((char*)NLMSG_DATA(nlh))[i], file);
+	}
+	fclose(file);
+
 
 	close(sock_fd);
 }
