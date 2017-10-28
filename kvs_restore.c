@@ -34,39 +34,40 @@ struct keyvalue_pair{
 };
 
 
-int fsize(FILE *fp);
+//int fsize(FILE *fp);
 int restore(int key, char* value);
 int main(int argc, char* argv[]){
 
 	char c;
-	char* keystring = calloc(0,sizeof(char)*255);
-	char* data = calloc(0,sizeof(char)*1024);
+
 	struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
-	char testdata[31] = "3\0stures data\08\0uwe bolls data";
-	int length;
+	//char testdata[31] = "3\0stures data\08\0uwe bolls data";
+	//int length;
 
 	FILE *fp = fopen("keystore.backup", "ab+");
 	if (fp == NULL) {
 		printf("Problem opening file");
 		return -1;
 	}
-	length = fsize(fp);
+	//length = fsize(fp);
 	//fill with testdata
-	if(length == 0){
+	/*if(length == 0){
 		for(int i = 0;i<31;i++){
 			int results = fputc(testdata[i], fp);
 			if (results == EOF) {
 				// Failed to write do error code here.
 			}
 		}
-	}
+	}*/
 
 	// Read contents from file
 	rewind(fp);
 	c = fgetc(fp);
 	int i = 0;
 	while (c != EOF && c != '\0'){
+		char* keystring = malloc(sizeof(char)*255);
+		char* data = malloc(sizeof(char)*1024);
 		while(c != '\0'){
 			keystring[i] = c;
 			c = fgetc(fp);
@@ -88,10 +89,10 @@ int main(int argc, char* argv[]){
 		if(c != EOF){
 			c = fgetc(fp);
 		}
+		free(keystring);
+		free(data);
 	}
 	free(pair);
-	free(keystring);
-	free(data);
 	fclose(fp);
 	return 0;
 }
@@ -149,10 +150,10 @@ int restore(int key, char* value){
 	return 0;
 }
 
-int fsize(FILE *fp){
+/*int fsize(FILE *fp){
     int prev=ftell(fp);
     fseek(fp, 0L, SEEK_END);
     int sz=ftell(fp);
     fseek(fp,prev,SEEK_SET); //go back to where we were
     return sz;
-}
+}*/
