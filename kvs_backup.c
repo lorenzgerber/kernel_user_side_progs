@@ -85,13 +85,11 @@ int main(int argc, char* argv[]){
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
 	printf("length of backup message %d\n", nlh->nlmsg_len);
-	printf("Received backup message: %s\n", (char *)NLMSG_DATA(nlh));
 
 	file = fopen("keystore.backup", "w");
 
 	for (int i = 0; i < nlh->nlmsg_len-16; i++){
 	  fputc(((char*)NLMSG_DATA(nlh))[i], file);
-	  printf("%d ", ((char*)NLMSG_DATA(nlh))[i]);
 	}
 	fclose(file);
 
