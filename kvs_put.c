@@ -32,6 +32,9 @@ struct keyvalue {
 struct opcode{
 	int op;
 };
+struct key{
+	int key;
+};
 int main(int argc, char* argv[]){
 
 
@@ -90,10 +93,10 @@ int main(int argc, char* argv[]){
 	nlh2->nlmsg_pid = getpid();
 	nlh2->nlmsg_flags = NLMSG_DONE;
 
-	char* data = malloc(sizeof(char)*strlen(argv[2])+1);
-	strcpy(data,argv[2]);
-	memcpy(NLMSG_DATA(nlh2), data, sizeof(char)*strlen(argv[2]+1));
-	printf("Sending message \"%s\" to kernel\n", data);
+	struct key* key = malloc(sizeof(struct key));
+	key->key = atoi(argv[1]);
+	memcpy(NLMSG_DATA(nlh2), key, sizeof(struct key));
+	printf("Sending message \"%d\" to kernel\n", key->key);
 	sendmsg(sock_fd,&msg,0);
 
 	printf("Waiting for message from kernel\n");
