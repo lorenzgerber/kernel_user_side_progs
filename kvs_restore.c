@@ -53,8 +53,8 @@ int main(int argc, char* argv[]){
 	while (c != EOF){
 
 		char* keystring = malloc(sizeof(char)*255);
-		char* data = malloc(sizeof(char)*500);
-		struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*500);
+		char* data = malloc(sizeof(char)*1024);
+		struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
 		while(c != '\0' && c != EOF){
 			keystring[i] = c;

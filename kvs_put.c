@@ -16,7 +16,11 @@
 
 #define MAX_PAYLOAD 1024 /* maximum payload size*/
 
-
+struct sockaddr_nl src_addr, dest_addr;
+struct nlmsghdr *nlh = NULL;
+struct iovec iov;
+int sock_fd;
+struct msghdr msg;
 
 struct keyvalue {
 		int operation;
@@ -26,11 +30,6 @@ struct keyvalue {
 
 int main(int argc, char* argv[]){
 
-	struct sockaddr_nl src_addr, dest_addr;
-	struct nlmsghdr *nlh = NULL;
-	struct iovec iov;
-	int sock_fd;
-	struct msghdr msg;
 
 	struct keyvalue *data;
 
