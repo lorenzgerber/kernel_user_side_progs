@@ -76,6 +76,7 @@ int main(int argc, char* argv[]){
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
+	printf("length %d\n", nlh->nlmsg_len-16);
 
 	int counter = 0;
 	for(int i = 0; i < nlh->nlmsg_len-16; i++){
