@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 	struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
 
-	FILE *fp = fopen("keystore.backup", "ab+");
+	FILE *fp = fopen("keystore.backup", "r");
 	if (fp == NULL) {
 		printf("Problem opening file");
 		return -1;
