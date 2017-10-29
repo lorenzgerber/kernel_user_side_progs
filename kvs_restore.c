@@ -132,7 +132,9 @@ int restore(struct keyvalue_pair* pair){
 	recvmsg(sock_fd, &msg, 0);
 	printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
 
+	free(data->value);
 	free(data);
+	free(nlh);
 	close(sock_fd);
 	return 0;
 }
