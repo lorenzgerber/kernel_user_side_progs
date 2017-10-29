@@ -37,7 +37,7 @@ int restore(struct keyvalue_pair* pair);
 
 int main(int argc, char* argv[]){
 
-	char c;
+	int c;
 	char* ptr;
 
 	FILE *fp = fopen("keystore.backup", "r");
@@ -58,21 +58,15 @@ int main(int argc, char* argv[]){
 
 		while(c != '\0' && c != EOF){
 			keystring[i] = c;
-			if(c != EOF){
-				c = fgetc(fp);
-			}
+			c = fgetc(fp);
 			i++;
 		}
 		keystring[i] = '\0';
-		if(c != EOF){
-			c = fgetc(fp);
-		}
+		c = fgetc(fp);
 		i=0;
 		while(c != '\0' && c != EOF){
 			data[i] = c;
-			if(c != EOF){
-				c = fgetc(fp);
-			}
+			c = fgetc(fp);
 			i++;
 		}
 		data[i] = '\0';
