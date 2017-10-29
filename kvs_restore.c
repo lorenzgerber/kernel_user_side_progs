@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
 		char* data = malloc(sizeof(char)*1024);
 		struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
-		while(c != '\0'){
+		while(c != '\0' && c != EOF){
 			keystring[i] = c;
 			c = fgetc(fp);
 			i++;
