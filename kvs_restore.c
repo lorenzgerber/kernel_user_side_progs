@@ -38,7 +38,6 @@ int restore(struct keyvalue_pair* pair);
 int main(int argc, char* argv[]){
 
 	char c;
-	struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
 
 
 	FILE *fp = fopen("keystore.backup", "r");
@@ -52,8 +51,11 @@ int main(int argc, char* argv[]){
 	c = fgetc(fp);
 	int i = 0;
 	while (c != EOF && c != '\0'){
+
 		char* keystring = malloc(sizeof(char)*255);
 		char* data = malloc(sizeof(char)*1024);
+		struct keyvalue_pair* pair = malloc(sizeof(struct keyvalue_pair)+sizeof(char)*1024);
+
 		while(c != '\0'){
 			keystring[i] = c;
 			c = fgetc(fp);
@@ -77,8 +79,9 @@ int main(int argc, char* argv[]){
 		}
 		free(keystring);
 		free(data);
+		free(pair);
 	}
-	free(pair);
+
 	fclose(fp);
 	return 0;
 }
