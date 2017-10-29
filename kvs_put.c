@@ -83,5 +83,6 @@ int main(int argc, char* argv[]){
 	recvmsg(sock_fd, &msg, 0);
 	printf("Received message payload: %s\n", (char *)NLMSG_DATA(nlh));
 
+	free(data);
 	close(sock_fd);
 }
