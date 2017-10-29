@@ -39,10 +39,11 @@ int main(int argc, char* argv[]){
 
 	int c;
 	char* ptr;
+	int restore_count = 0;
 
 	FILE *fp = fopen("keystore.backup", "r");
 	if (fp == NULL) {
-		printf("Problem opening file");
+		printf("Problem opening file\n");
 		return -1;
 	}
 
@@ -77,11 +78,17 @@ int main(int argc, char* argv[]){
 		if(c != EOF){
 			c = fgetc(fp);
 		}
+		restore_count++;
 		free(keystring);
 		free(data);
 		free(pair);
 	}
-
+	if(restore_count){
+		printf("%d entries were processed from backup file\n", restore_count);
+	}else{
+		printf("No entries currently in backup file\n");
+	}
+	printf("restore complete\n");
 	fclose(fp);
 	return 0;
 }
