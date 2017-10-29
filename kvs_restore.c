@@ -116,7 +116,7 @@ int restore(struct keyvalue_pair* pair){
 	nlh = (struct nlmsghdr *)malloc(NLMSG_SPACE(MAX_PAYLOAD));
 	memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD));
 	nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
-	nlh->nlmsg_pid = getpid();
+	nlh->nlmsg_pid = pthread_self() << 16 | getpid();
 	nlh->nlmsg_flags = 0;
 
 
