@@ -92,6 +92,7 @@ int main(int argc, char* argv[]){
 	  }
 	  fclose(file);
 	}
-
+	free(nlh);
+	free(data);
 	close(sock_fd);
 }

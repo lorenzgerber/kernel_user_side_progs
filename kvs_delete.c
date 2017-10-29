@@ -80,5 +80,7 @@ int main(int argc, char*argv[]) {
 	recvmsg(sock_fd, &msg, 0);
 	printf("%s\n", (char *)NLMSG_DATA(nlh));
 
+	free(nlh);
+	free(data);
 	close(sock_fd);
 }
