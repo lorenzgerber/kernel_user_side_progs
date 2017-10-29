@@ -66,7 +66,9 @@ int main(int argc, char* argv[]){
 		i=0;
 		while(c != '\0' && c != EOF){
 			data[i] = c;
-			c = fgetc(fp);
+			if(c != EOF){
+				c = fgetc(fp);
+			}
 			i++;
 		}
 		data[i] = '\0';
