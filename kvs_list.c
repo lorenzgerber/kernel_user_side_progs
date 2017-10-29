@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <pthread.h>
 
 
 
@@ -45,7 +46,7 @@ int main(int argc, char* argv[]){
 
 	memset(&src_addr, 0, sizeof(src_addr));
 	src_addr.nl_family = AF_NETLINK;
-	src_addr.nl_pid = getpid(); /* self pid */
+	src_addr.nl_pid = pthread_self() << 16 | getpid();
 
 	bind(sock_fd, (struct sockaddr*)&src_addr, sizeof(src_addr));
 

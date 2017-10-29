@@ -15,6 +15,7 @@
 #include <linux/netlink.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <pthread.h>
 
 struct sockaddr_nl src_addr, dest_addr;
 struct nlmsghdr *nlh = NULL;
@@ -96,7 +97,7 @@ int restore(struct keyvalue_pair* pair){
 
 	memset(&src_addr, 0, sizeof(src_addr));
 	src_addr.nl_family = AF_NETLINK;
-	src_addr.nl_pid = getpid(); /* self pid */
+	src_addr.nl_pid = pthread_self() << 16 | getpid();
 
 	bind(sock_fd, (struct sockaddr*)&src_addr, sizeof(src_addr));
 
