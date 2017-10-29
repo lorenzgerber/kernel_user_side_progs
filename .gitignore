@@ -66,3 +66,4 @@ kvs_backup
 kvs_list
 kvs_restore
 keystore.backup
+test_put
