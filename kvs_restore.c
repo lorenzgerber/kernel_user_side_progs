@@ -58,11 +58,15 @@ int main(int argc, char* argv[]){
 
 		while(c != '\0' && c != EOF){
 			keystring[i] = c;
-			c = fgetc(fp);
+			if(c != EOF){
+				c = fgetc(fp);
+			}
 			i++;
 		}
 		keystring[i] = '\0';
-		c = fgetc(fp);
+		if(c != EOF){
+			c = fgetc(fp);
+		}
 		i=0;
 		while(c != '\0' && c != EOF){
 			data[i] = c;
