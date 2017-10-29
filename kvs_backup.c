@@ -62,14 +62,9 @@ int main(int argc, char* argv[]){
 	nlh->nlmsg_pid = getpid();
 	nlh->nlmsg_flags = 0;
 
-
 	data = malloc(sizeof(struct keyvalue));
-	//data->key = atoi(argv[1]);
 	data->operation = 4;
-	//data->value = malloc(sizeof(char)*strlen(argv[2]));
-	//strcpy(data->value, argv[2]);
 	memcpy(NLMSG_DATA(nlh), data, sizeof(struct keyvalue));
-
 
 	iov.iov_base = (void *)nlh;
 	iov.iov_len = nlh->nlmsg_len;
@@ -84,15 +79,19 @@ int main(int argc, char* argv[]){
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("length of backup message %d\n", nlh->nlmsg_len);
+	if (nlh->nlmsg_len-16==0){
+	  printf("Key value stroage is empty\n");
+	  file = fopen("keystore.backup", "w");
+	  fclose(file);
+	  
+	} else {
+	  file = fopen("keystore.backup", "w");
 
-	file = fopen("keystore.backup", "w");
-
-	for (int i = 0; i < nlh->nlmsg_len-16; i++){
-	  fputc(((char*)NLMSG_DATA(nlh))[i], file);
+	  for (int i = 0; i < nlh->nlmsg_len-16; i++){
+	    fputc(((char*)NLMSG_DATA(nlh))[i], file);
+	  }
+	  fclose(file);
 	}
-	fclose(file);
-
 
 	close(sock_fd);
 }

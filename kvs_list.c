@@ -76,21 +76,30 @@ int main(int argc, char* argv[]){
 
 	/* Read message from kernel */
 	recvmsg(sock_fd, &msg, 0);
-	printf("length %d\n", nlh->nlmsg_len-16);
-
-	int counter = 0;
-	for(int i = 0; i < nlh->nlmsg_len-16; i++){
-	  if (((char*)NLMSG_DATA(nlh))[i] == 0){
-	    if(counter == 0){
-	      printf(" ");
-	      counter ++;
-	    } else {
-	      printf("\n");
-	      counter = 0;
+	if(nlh->nlmsg_len-16 == 0){
+	  printf("The key value store is empty!\n");
+	} else {
+	  int counter = 0;
+	  for(int i = 0; i < nlh->nlmsg_len-16; i++){
+	    if (((char*)NLMSG_DATA(nlh))[i] == 0){
+	      if(counter == 0){
+		printf(" ");
+		counter ++;
+	      } else {
+		printf("\n");
+		counter = 0;
+	      }
 	    }
-	  }
 	  printf("%c", ((char*)NLMSG_DATA(nlh))[i]);
+	  }
+
+
+
 	}
+	
+	
+
+	
 
 
 }
