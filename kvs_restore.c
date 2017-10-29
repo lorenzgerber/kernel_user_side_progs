@@ -74,9 +74,9 @@ int main(int argc, char* argv[]){
 		pair->key = strtol(keystring,&ptr,10);
 		strcpy(pair->data, data);
 		restore(pair);
-		//if(c != EOF){
+		if(c != EOF){
 			c = fgetc(fp);
-		//}
+		}
 		free(keystring);
 		free(data);
 		free(pair);
