@@ -14,7 +14,7 @@
 #include <string.h>
 #include "timer.h"
 
-#define NUMBER_THREADS 20
+#define NUMBER_THREADS 10
 #define NETLINK_USER 31
 #define PUT 0
 #define GET 1
@@ -52,7 +52,7 @@ struct iovec iov;
 int sock_fd;
 struct msghdr msg;
 
-int kvs_put(int in_key, char* in_value);
+int kvs_put(int in_key, char* in_value, int my_rank);
 
 int main(int argc, char* argv[]) {
 
@@ -121,8 +121,8 @@ void *Pth_empty(void* rank){
 
   GET_WALL_TIME(thread_time[my_rank].wall_t_run);
  
-  for(int i = 0; 0 < 2; i++){
-	  kvs_put(i, "testos");
+  for(int i = 0; i < 100; i++){
+    kvs_put(i+100*my_rank, "testos", my_rank);
   }
 
   GET_WALL_TIME(thread_time[my_rank].wall_t_finish);
@@ -130,14 +130,15 @@ void *Pth_empty(void* rank){
   return NULL;
 }
 
-int kvs_put(int in_key, char* in_value){
+int kvs_put(int in_key, char* in_value, int my_rank){
 
 
 	struct keyvalue *data;
 
-	sock_fd=socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);
+	sock_fd=socket(PF_NETLINK, SOCK_RAW, NETLINK_USER+my_rank);
 	if(sock_fd<0)
 		return -1;
+	printf("sock_fd %d", sock_fd);
 
 	memset(&src_addr, 0, sizeof(src_addr));
 	src_addr.nl_family = AF_NETLINK;
