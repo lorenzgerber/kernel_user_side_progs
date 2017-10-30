@@ -16,6 +16,7 @@ backup: kvs_backup.c
 	$(CC) $(CFLAGS) -o kvs_backup kvs_backup.c
 list : kvs_list.c
 	$(CC) $(CFLAGS) -o kvs_list kvs_list.c
-
+benchmark: Benchmark.c
+	$(CC) $(CFLAGS) -o benchmark Benchmark.c -lpthread
 clean:
 	rm kvs_get kvs_put kvs_delete kvs_restore kvs_backup kvs_list
